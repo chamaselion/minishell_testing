@@ -1,2 +1,0 @@
--rwxrwxrwx 1 szb szb  2376 Dec  4 18:55 cheatsheet.txt
--rwxrwxrwx 1 szb szb  4578 Dec  4 18:55 todo.txt
