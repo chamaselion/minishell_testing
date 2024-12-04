@@ -1,0 +1,152 @@
+1. Project Setup and Basic Structure  
+
+1.1. Set up your development environment  
+
+1.2. Create a basic main function and project structure  
+
+1.3. Implement a basic read-eval-print loop (REPL) 
+
+2. Input Handling and Parsing  
+
+2.1. Implement input reading using readline  
+
+2.2. Create a lexer to tokenize input  
+
+2.3. Develop a parser to understand command structure  
+
+2.4. Handle quoting and escaping 
+
+3. Command Execution  
+
+3.1. Implement a function to execute simple commands  
+
+3.2. Set up process creation using fork and execve  
+
+3.3. Implement wait functionality for child processes 
+
+4. Builtin Commands  
+
+4.1. Implement 'echo' with -n option  
+
+4.2. Implement 'cd' with relative and absolute paths  
+
+4.3. Implement 'pwd'  
+
+4.4. Implement 'export'  
+
+4.5. Implement 'unset'  
+
+4.6. Implement 'env'  
+
+4.7. Implement 'exit' 
+
+5. Piping  
+
+5.1. Modify the parser to recognize pipe symbols  
+
+5.2. Implement pipe creation and management  
+
+5.3. Modify command execution to handle piped commands 
+
+6. Redirections  
+
+6.1. Extend the parser to recognize redirection symbols  
+
+6.2. Implement input redirection (<)  
+
+6.3. Implement output redirection (>)  
+
+6.4. Implement here-document (<<) 6.5. Implement append output redirection (>>) 
+
+7. Environment Variables  
+
+7.1. Implement environment variable expansion  
+
+7.2. Modify the parser to recognize and expand $VAR syntax 
+
+8. Signal Handling  
+
+8.1. Implement ctrl-C handler (new prompt on new line)  
+
+8.2. Implement ctrl-D handler (exit shell)  
+
+8.3. Implement ctrl-\ handler (do nothing) 
+
+9. Error Handling and Edge Cases  
+
+9.1. Implement comprehensive error checking  
+
+9.2. Handle edge cases in all functionalities 
+
+10. Testing and Refinement  
+
+10.1. Develop a test suite for all functionalities  
+
+10.2. Perform thorough testing and debugging  
+
+10.3. Optimize for performance and memory usage 
+
+TODO Deadline 06/10
+
+- Get the parsing part compilable so the execution part can interact
+- ?handling void pointers in combo with printf :
+	- original with a wrapper function to get rid of output format errors
+	- OR alter the ft_printf to avoid that error (worked better with NULL pointers)
+		- think about a printf_error(to put out error messages, instead of doing it via perror)
+- different uses for $
+	- as a reference before a variable
+	- as just a string when within single quotes
+	- $? as a request for the last exit status the 
+		-"$?" has to be recognized as an int
+		- expr $? + $? has to yield 254 for a command not found.
+
+
+Further questions
+- exit status
+	- ? global variable? struct value of the minishell?
+	- wrapper struct that has integer for exit status? enum?
+		-struct or enum are the way
+
+- export and unset
+	- temp to swap 
+
+- ?env WITHOUT ANYTHING, so just getting a static list?
+	- difference to export: format and 
+	- last command called only shown with env
+	- think about doing it as a linked list (or our approach as a file)
+	- deleting a line is easier with linked list
+	- think about ls_colors (split only at 1st occurence)
+	- with export, even inputs that make no sense are listed as env entry
+- ?Piping as a linked list of functions and results? 
+	- execve prohibits using the original process and getting back to that. 
+	so no way around parent/child
+
+
+todo:
+//tokenize substrings
+//special chars are also token in the doubly linked list
+//get rid of "end_position" and replace it with easy arithmetics where applicable (What about interactive mode?)
+//think about using counter for entering interactive mode
+//split 
+//$VAR1=42 into  $  VAR1  =  42 -> changed into VAR1=42 and a call to split if and where needed
+
+rework role assignment
+reintroduce command_expected
+--> OR (existing) variable
+
+
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# export VAR1=x
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# VAR1=y
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# env | grep "VAR1"
+VAR1=y
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# 
+
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# echo "Hello" 'World$' Howdy pwd
+Hello World$ Howdy pwd
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# echo "Hello" 'World$' Howdy | pwd
+/mnt/c/projects/minishell
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# pwd | echo "Hello" 'World$' Howdy
+Hello World$ Howdy
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# pwd | echo
+
+(base) root@DESKTOP-F4AL6TI:/mnt/c/projects/minishell# 
